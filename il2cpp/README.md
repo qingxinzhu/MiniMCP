@@ -1,6 +1,11 @@
 # MiniMCP — IL2CPP 版
 
-**把 Unity IL2CPP 游戏变成一个可通过 HTTP 访问的运行时桥。**
+**把 Unity IL2CPP 游戏变成一个可实时读写的运行时服务（「类 MCP」）。**
+
+> 与标准 MCP 的差别、以及**怎么让 AI 接入并直接调用**（推荐走 [`tools/mcp_bridge.py`](../tools/mcp_bridge.py) 的 MCP 桥），
+> 请看 **[仓库根 README](../README.md#怎么让-ai-接入)**。
+>
+> 本文件只讲 IL2CPP 版特有的部分（interop 程序集、安全边界、编译链路）。
 
 与仓库根目录的 [Mono 版](../README.md) 是**两套独立实现**：
 
