@@ -1,0 +1,38 @@
+# ===== 构建产物 =====
+bin/
+obj/
+*.user
+*.suo
+
+# ===== 插件二进制（请自行编译，不要提交）=====
+MiniMCP.dll
+*.dll
+
+# ===== 凭据与密钥（务必不要提交）=====
+*.token
+*token*.txt
+*.key
+*.pfx
+*.p12
+com.operit.minimcp.cfg
+*.cfg.bak*
+
+# ===== 证书（如需示例，只提交 .crt 或生成脚本）=====
+*.crt
+!docs/sample/*.crt
+
+# ===== 编辑器/系统 =====
+.vs/
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ===== 本地环境残留 =====
+*.log
+*.bak
+*.bak-*
+*.orig
+*.old
+*.tar.gz
