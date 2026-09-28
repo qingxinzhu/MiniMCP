@@ -205,3 +205,61 @@ curl -X POST "http://<IP>:18081/setpath" \
 
 > 本版（v0.1.0 明文基线）沿用最简实现：**HTTP 状态码一律 `200`**，成功与否看响应体里的 `ok` 字段。
 > 想改成规范的 4xx/5xx，在 `MiniMcp.cs` 的 `WriteResponse` 里带上状态码即可（端点逻辑不用动）。
+---
+
+# IL2CPP 版的端点
+
+端口：`127.0.0.1:18081`（只绑本机）
+基础响应均带 `"ok": true|false`。
+
+## 只读
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| GET | `/` | 端点索引 |
+| GET | `/health` | 插件状态（版本 / Unity 版本 / 游戏名）|
+| GET | `/ping` | 心跳 + 当前帧号 |
+| GET | `/log` | 插件日志（最后几条）|
+| GET | `/scene` | 当前场景名 + 资源路径 + buildIndex |
+| GET | `/stats` | 对象数 / 激活数 / 场景 / 帧 / 时间倍率 / FPS / 游戏版本 |
+| GET | `/objects?name=<关键词>` | 按名找对象（含坐标、子对象数、激活状态）|
+| GET | `/tree?name=<名>&depth=<N>` | 对象树（缩进文本，`*`=激活 `.`=未激活，上限 800 节点）|
+| GET | `/fields?name=<名>` | 安全字段导出（**仅游戏脚本类 + 值类型**）|
+| GET | `/player` | 玩家坐标 + 物理状态（Rigidbody / gravity / 父子层级）|
+
+## 写入 / 调用
+
+| 方法 | 路径 | 请求体 | 说明 |
+|---|---|---|---|
+| POST | `/get` | `{"name":"X","field":"Y"}` | 读字段 |
+| POST | `/set` | `{"name":"X","field":"Y","value":V}` | 写字段 |
+| POST | `/listfields` | `{"name":"X"}` | 列出对象的所有组件 |
+| POST | `/call` | `{"name":"X","method":"M"}` | 调用方法（**仅 0 参数**，其他返回明确错误）|
+| POST | `/move` | `{"name":"X","x":..,"y":..,"z":..}` | 改坐标（可只传部分轴）|
+| POST | `/setactive` | `{"name":"X","active":true}` | 开关对象 |
+| POST | `/timescale` | `{"value":2.0}` | 游戏速度倍率 |
+
+## 玩家辅助
+
+| 方法 | 路径 | 请求体 | 说明 |
+|---|---|---|---|
+| POST | `/noclip` | `{"on":1}` | 穿墙开 / `{"on":0}` 关（`Rigidbody.detectCollisions`）|
+| POST | `/ground` | `{}` | 强制落回地面（应急）|
+
+## 示例
+
+```bash
+curl http://127.0.0.1:18081/health
+curl http://127.0.0.1:18081/stats
+curl http://127.0.0.1:18081/objects?name=Camera
+curl "http://127.0.0.1:18081/tree?name=Canvas&depth=2"
+
+curl -X POST http://127.0.0.1:18081/get  -H "Content-Type: application/json" -d '{"name":"Game","field":"indexAudio"}'
+curl -X POST http://127.0.0.1:18081/set  -H "Content-Type: application/json" -d '{"name":"Game","field":"indexAudio","value":3}'
+curl -X POST http://127.0.0.1:18081/move -H "Content-Type: application/json" -d '{"name":"MainCamera","y":3.0}'
+curl -X POST http://127.0.0.1:18081/timescale -H "Content-Type: application/json" -d '{"value":2}'
+curl -X POST http://127.0.0.1:18081/noclip -H "Content-Type: application/json" -d '{"on":1}'
+```
+
+> 注：以上字体在游戏内对象名下有效；不同游戏的对象名差异很大，先用 `/objects` 和 `/tree` 探。
+> Unity 内置类（`UnityEngine.*`）不支持字段读写（会崩游戏，插件已主动跳过）。

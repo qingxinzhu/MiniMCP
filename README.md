@@ -1,5 +1,22 @@
 # MiniMCP
 
+**把 Windows 上运行的 Unity 游戏，变成一个可通过 HTTP 访问的运行时桥。**
+
+本仓库包含 **两套独立实现**：
+
+| 版本 | 适用游戏后端 | BepInEx | 目录 | 产物 |
+|---|---|---|---|---|
+| **Mono 版**（本 README 主体）| Mono | 5.4.23.x | [`src/`](src/) | `MiniMCP.dll` |
+| **IL2CPP 版** | **IL2CPP** | **6 (be.xxx)** | [`il2cpp/`](il2cpp/) | `MiniMCP.Il2Cpp.dll` |
+
+> 怎么看你的游戏是哪种？看游戏根目录有没有 `GameAssembly.dll`：
+>
+> **有 → 用 IL2CPP 版**；没有（且 `<游戏名>_Data/Managed/` 里是一堆 dll）→ 用 Mono 版。
+
+---
+
+## Mono 版（下文）
+
 **把 Windows 上运行的 Mono Unity 游戏，变成一个可通过 HTTP 访问的运行时桥。**
 一个 **Windows x64 的 BepInEx 插件**：放好 `MiniMCP.dll` 就能让 AI / 脚本 / 调试器在本机或局域网直连活着的游戏进程，实时读取场景树、查改字段、调用方法 —— 不改游戏本体、不重启、不读档。
 
