@@ -4,6 +4,14 @@
     <AssemblyName>MiniMCP</AssemblyName>
     <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <!-- 发布用：不生成 PDB，并把编译机路径映射成占位符（防止泄露本地路径） -->
+    <Version>1.0.0</Version>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildProjectDirectory)=/src,$(MSBuildProjectDirectory)/../=/</PathMap>
+    <RepositoryUrl>https://github.com/shatangji/MiniMCP</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BepInEx.Core" Version="5.*" />

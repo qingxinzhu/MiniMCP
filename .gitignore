@@ -36,3 +36,8 @@ Thumbs.db
 *.orig
 *.old
 *.tar.gz
+
+# build outputs (binaries are published as Release assets, not in git)
+dist/
+bin/
+obj/
