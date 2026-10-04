@@ -11,7 +11,7 @@
     <DebugSymbols>false</DebugSymbols>
     <Deterministic>true</Deterministic>
     <PathMap>$(MSBuildProjectDirectory)=/src,$(MSBuildProjectDirectory)/../=/</PathMap>
-    <RepositoryUrl>https://github.com/shatangji/MiniMCP</RepositoryUrl>
+    <RepositoryUrl>https://github.com/qingxinzhu/MiniMCP</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BepInEx.Core" Version="5.*" />
